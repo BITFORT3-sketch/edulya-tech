@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script>(function(){var t=localStorage.getItem('edulya_theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDULYA-TECH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo">
+      <img src="images/logo-icon.png" alt="Logo EDULYA-TECH" class="logo-mark">
+      <span class="logo-text">EDULYA<span class="logo-dot">-TECH</span></span>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Accueil</a>
+      <a href="index.html#formations">Formations</a>
+      <a href="a-propos.html">À propos</a>
+      <a href="contact.html">Contacts</a>
+    </nav>
+    <div class="header-actions">
+      <a href="inscription.html" class="link-muted">Créer un compte</a>
+      <a href="index.html#formations" class="btn btn-primary">Voir les formations</a>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Changer le thème">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+    </button>
+    <button class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== AUTH SECTION ===== -->
+<section class="auth-section">
+  <div class="container auth-grid">
+
+    <div class="auth-side">
+      <p class="eyebrow">// authentification</p>
+      <h1>Content de te revoir.</h1>
+      <p class="page-intro-sub">Connecte-toi pour accéder à ton tableau de bord, suivre tes formations et gérer ton compte.</p>
+      <div class="terminal terminal--small" aria-hidden="true">
+        <div class="terminal-bar">
+          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          <span class="terminal-title">login.py</span>
+        </div>
+        <div class="terminal-body">
+          <p><span class="prompt">$</span> edulya login</p>
+          <p class="out">→ email : ...</p>
+          <p class="out">→ mot de passe : ...</p>
+          <p><span class="prompt">$</span> <span class="cursor">connexion --start</span></p>
+        </div>
+      </div>
+    </div>
+
+    <form class="auth-form" id="loginForm">
+      <h2>Connexion</h2>
+
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" name="email" placeholder="toi@exemple.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="loginPassword">Mot de passe</label>
+        <div class="password-field">
+          <input type="password" id="loginPassword" name="password" placeholder="••••••••" required>
+          <button type="button" class="toggle-password" data-target="loginPassword" aria-label="Afficher le mot de passe">
+            <svg class="icon-eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <svg class="icon-eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+          </button>
+        </div>
+        <a href="mot-de-passe-oublie.html" class="link-muted" style="display:inline-block; margin-top:8px; font-size:0.85rem;">Mot de passe oublié ?</a>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg auth-submit">Se connecter</button>
+      <p class="form-note" id="loginNote"></p>
+
+      <p class="auth-switch">Pas encore de compte ? <a href="inscription.html">Inscris-toi</a></p>
+    </form>
+
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <img src="images/logo-icon.png" alt="Logo EDULYA-TECH" class="logo-mark">
+      <span class="logo-text">EDULYA<span class="logo-dot">-TECH</span></span>
+      <p>Formation numérique. Comportement d'innovation.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Liens</h4>
+      <a href="index.html">Accueil</a>
+      <a href="index.html#formations">Formation</a>
+      <a href="a-propos.html">À propos</a>
+      <a href="contact.html">Contact</a>
+      <a href="conditions-generales.html">Conditions générales</a>
+      <a href="politique-confidentialite.html">Politique de confidentialité</a>
+    </div>
+    <div class="footer-col">
+      <h4>Réseaux sociaux</h4>
+      <a href="https://www.facebook.com/share/17fbBbAQwH" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://wa.me/237622150710" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-bottom container">© 2026 EDULYA-TECH. Tous droits réservés.</div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
