@@ -16,13 +16,8 @@ from routes.avis import avis_bp
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    CORS(
-        app,
-        resources={r"/*": {"origins":["https://edulya-tech-1.onrender.com"]}},
-        supports_credentials=True,
-        methods=["GET", "POST", "OPTIONS", "PUT", "DELETE"],
-        allow_headers=["Content-Type", "Authorization"]
-    )
+    
+    CORS(app,resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
     # Nécessaire pour envoyer/recevoir le cookie de session depuis le frontend
     # (ex: fetch avec { credentials: "include" }).
