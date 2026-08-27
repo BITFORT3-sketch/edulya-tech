@@ -33,7 +33,7 @@ def create_app():
 
     db.init_app(app)
 
-     return app
+    return app
 
     # ----- Sécurité : avertissements au démarrage -----
     # Ces valeurs par défaut sont pratiques en local mais NE DOIVENT PAS
