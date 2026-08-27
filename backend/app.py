@@ -40,7 +40,6 @@ def create_app():
         print("[SÉCURITÉ] ATTENTION : FRONTEND_ORIGIN autorise toutes les origines ('*'). "
               "Remplace-la par l'URL exacte de ton frontend une fois déployé.")
 
-    return app
     # ----- Sécurité : en-têtes HTTP de base -----
     # Protections simples et sans risque de casser le site (contrairement à
     # une politique CSP stricte, qui demanderait d'auditer tous les scripts
