@@ -18,7 +18,7 @@ def create_app():
     app.config.from_object(Config)
     CORS(
         app,
-        resources={r"/api/*": {"origins":["https://edulya-tech-1.onrender.com"]}},
+        resources={r"/*": {"origins":["https://edulya-tech-1.onrender.com"]}},
         supports_credentials=True,
         methods=["GET", "POST", "OPTIONS", "PUT", "DELETE"],
         allow_headers=["Content-Type", "Authorization"]
