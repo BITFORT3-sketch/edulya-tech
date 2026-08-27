@@ -3,7 +3,7 @@
 // Ce fichier appelle le vrai backend Flask (voir js/config.js pour l'URL).
 // Toutes les requêtes liées à un compte utilisent { credentials: 'include' }
 // pour envoyer/recevoir le cookie de session.
-
+console.log("Formulaire soumis !");
 document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('navToggle');
   const nav = document.getElementById('mainNav');
