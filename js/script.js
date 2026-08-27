@@ -234,8 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       try {
-        const baseUrl = window.API_URL || 'https://edulya-tech.onrender.com';
-        const res = await fetch(`${API_URL}/api/register`, {
+        const res = await fetch(`${API_URL}/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
