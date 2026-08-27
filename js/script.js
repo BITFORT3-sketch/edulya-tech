@@ -3,7 +3,6 @@
 // Ce fichier appelle le vrai backend Flask (voir js/config.js pour l'URL).
 // Toutes les requêtes liées à un compte utilisent { credentials: 'include' }
 // pour envoyer/recevoir le cookie de session.
-const API_URL= 'https://edulya-tech.onrender.com';
 document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('navToggle');
   const nav = document.getElementById('mainNav');
@@ -235,6 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       try {
+        const baseUrl = window.API_URL || 'https://edulya-tech.onrender.com';
         const res = await fetch(`${API_URL}/api/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
