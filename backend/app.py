@@ -35,8 +35,6 @@ def create_app():
 
     db.init_app(app)
 
-    return app
-
     # ----- Sécurité : avertissements au démarrage -----
     # Ces valeurs par défaut sont pratiques en local mais NE DOIVENT PAS
     # rester telles quelles une fois le site déployé pour de vrai.
@@ -47,6 +45,7 @@ def create_app():
         print("[SÉCURITÉ] ATTENTION : FRONTEND_ORIGIN autorise toutes les origines ('*'). "
               "Remplace-la par l'URL exacte de ton frontend une fois déployé.")
 
+    return app
     # ----- Sécurité : en-têtes HTTP de base -----
     # Protections simples et sans risque de casser le site (contrairement à
     # une politique CSP stricte, qui demanderait d'auditer tous les scripts
