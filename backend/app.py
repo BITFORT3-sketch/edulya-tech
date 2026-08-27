@@ -21,7 +21,7 @@ def create_app():
         resources={r"/api/*": {"origins":["https://edulya-tech-1.onrender.com"]}},
         supports_credentials=True,
         methods=["GET", "POST", "OPTIONS", "PUT", "DELETE"],
-        allow_headers={"Content-Type", "Authorization"]
+        allow_headers=["Content-Type", "Authorization"]
     )
 
     # Nécessaire pour envoyer/recevoir le cookie de session depuis le frontend
