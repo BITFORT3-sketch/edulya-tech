@@ -45,14 +45,6 @@ def create_app():
         print("[SÉCURITÉ] ATTENTION : FRONTEND_ORIGIN autorise toutes les origines ('*'). "
               "Remplace-la par l'URL exacte de ton frontend une fois déployé.")
 
-    @app.after_request
-    def after_request(response):
-        response.headers.add("Access-Control-Allow-Origin", "https://edulya-tech-1.onrender.com")
-        response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
-        response.headers.add("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE")
-        response.headers.add("Access-Control-Allow-Credentials", "true")
-        return response
-
     return app
     # ----- Sécurité : en-têtes HTTP de base -----
     # Protections simples et sans risque de casser le site (contrairement à
