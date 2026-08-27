@@ -12,8 +12,11 @@ from rate_limit import trop_de_tentatives, enregistrer_tentative, reinitialiser_
 auth_bp = Blueprint("auth", __name__, url_prefix="/api")
 
 
-@auth_bp.route("/register", methods=["POST"])
+@auth_bp.route("/register", methods=["POST", "OPTIONS"])
 def register():
+    if request.method=="OPTIONS":
+        return "",200
+        
     data = request.get_json(silent=True) or {}
 
     nom = (data.get("nom") or "").strip()
