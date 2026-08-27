@@ -17,7 +17,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     
-    CORS(app,resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
+    CORS(app,resources={r"/api/*": {"origins": Config.FRONTEND_ORIGIN}}, supports_credentials=True)
 
     # Nécessaire pour envoyer/recevoir le cookie de session depuis le frontend
     # (ex: fetch avec { credentials: "include" }).
