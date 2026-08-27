@@ -4,4 +4,4 @@
 // Une fois le backend déployé sur Render, remplace cette valeur par ton URL publique,
 // ex: 'https://edulya-tech-api.onrender.com'
 
-const API_URL = 'https://edulya-tech.onrender.com';
+const API_URL = 'https://edulya-tech-1.onrender.com';
