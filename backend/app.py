@@ -15,8 +15,12 @@ from routes.avis import avis_bp
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)
     app.config.from_object(Config)
+    CORS(
+        app,
+        resources={r"/api/*":{"origins":["https://edulya-tech.onrender.com"]}}
+        supports_credentials=True
+    )
 
     # Nécessaire pour envoyer/recevoir le cookie de session depuis le frontend
     # (ex: fetch avec { credentials: "include" }).
@@ -29,7 +33,7 @@ def create_app():
 
     db.init_app(app)
 
-    CORS(app, supports_credentials=True, origins=Config.FRONTEND_ORIGIN)
+     return app
 
     # ----- Sécurité : avertissements au démarrage -----
     # Ces valeurs par défaut sont pratiques en local mais NE DOIVENT PAS
