@@ -17,13 +17,17 @@ from routes.avis import avis_bp
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    
-    CORS(app,resources={r"/api/*": {"origins": ["https://edulya-tech-1.onrender.com"]}}, supports_credentials=True)
 
     # Nécessaire pour envoyer/recevoir le cookie de session depuis le frontend
     # (ex: fetch avec { credentials: "include" }).
     app.config["SESSION_COOKIE_SAMESITE"] = "None"
     app.config["SESSION_COOKIE_SECURE"] = True  # True en production (HTTPS sur Render)
+
+    CORS(
+        app,
+        resources={r"/api/*": {"origins": ["https://edulya-tech-1.onrender.com"]}}, 
+        supports_credentials=True
+    )
 
     # L'utilisateur reste connecté 30 jours (session "permanente" côté Flask) —
     # il ne doit être déconnecté que s'il clique lui-même sur "Se déconnecter".
