@@ -12,8 +12,11 @@ from rate_limit import trop_de_tentatives, enregistrer_tentative, reinitialiser_
 auth_bp = Blueprint("auth", __name__, url_prefix="/api")
 
 
-@auth_bp.route("/register", methods=["POST"])
+@auth_bp.route("/register", methods=["POST", "OPTIONS"])
 def register():
+    if request.method=="OPTIONS":
+        return "",200
+        
     data = request.get_json(silent=True) or {}
 
     nom = (data.get("nom") or "").strip()
@@ -21,12 +24,16 @@ def register():
     email = (data.get("email") or "").strip().lower()
     telephone = (data.get("telephone") or "").strip()
     password = data.get("password") or ""
+    conditions_acceptees = bool(data.get("conditions_acceptees", False))
 
     if not all([nom, prenom, email, telephone, password]):
         return jsonify({"error": "Tous les champs sont obligatoires."}), 400
 
     if len(password) < 8:
         return jsonify({"error": "Le mot de passe doit contenir au moins 8 caractères."}), 400
+
+    if not conditions_acceptees:
+        return jsonify({"error": "Tu dois accepter les conditions générales et la politique de confidentialité."}), 400
 
     if User.query.filter_by(email=email).first():
         return jsonify({"error": "Un compte existe déjà avec cet email."}), 409
@@ -37,6 +44,7 @@ def register():
         email=email,
         telephone=telephone,
         password_hash=generate_password_hash(password),
+        conditions_acceptees=True,
     )
     db.session.add(user)
     db.session.commit()
@@ -75,28 +83,6 @@ def logout():
     return jsonify({"message": "Déconnecté."}), 200
 
 
-@auth_bp.route("/compte", methods=["DELETE"])
-def supprimer_compte():
-    user_id = session.get("user_id")
-    if not user_id:
-        return jsonify({"error": "Connexion requise."}), 401
-
-    user = User.query.get(user_id)
-    if not user:
-        session.pop("user_id", None)
-        return jsonify({"error": "Compte introuvable."}), 404
-
-    # On supprime d'abord ce qui dépend du compte (achats, avis), puis le
-    # compte lui-même, pour respecter les clés étrangères.
-    Avis.query.filter_by(user_id=user_id).delete()
-    Purchase.query.filter_by(user_id=user_id).delete()
-    db.session.delete(user)
-    db.session.commit()
-
-    session.pop("user_id", None)
-    return jsonify({"message": "Compte supprimé."}), 200
-
-
 @auth_bp.route("/me", methods=["GET"])
 def me():
     user_id = session.get("user_id")
@@ -109,6 +95,34 @@ def me():
         return jsonify({"user": None}), 200
 
     return jsonify({"user": user.to_dict()}), 200
+
+
+@auth_bp.route("/supprimer-compte", methods=["DELETE", "POST"])
+def supprimer_compte():
+    """Supprime définitivement le compte connecté et ses données liées."""
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Tu dois être connecté pour supprimer ton compte."}), 401
+
+    data = request.get_json(silent=True) or {}
+    password = data.get("password") or ""
+    user = User.query.get(user_id)
+    if not user:
+        session.pop("user_id", None)
+        return jsonify({"error": "Compte introuvable."}), 404
+
+    if not password or not check_password_hash(user.password_hash, password):
+        return jsonify({"error": "Mot de passe incorrect. Le compte n'a pas été supprimé."}), 403
+
+    # Les données liées doivent être supprimées avant l'utilisateur pour éviter
+    # une violation des clés étrangères sur PostgreSQL.
+    Avis.query.filter_by(user_id=user.id).delete(synchronize_session=False)
+    Purchase.query.filter_by(user_id=user.id).delete(synchronize_session=False)
+    db.session.delete(user)
+    db.session.commit()
+    session.clear()
+
+    return jsonify({"message": "Ton compte et les données associées ont été supprimés définitivement."}), 200
 
 
 @auth_bp.route("/mot-de-passe-oublie", methods=["POST"])
@@ -142,9 +156,17 @@ def mot_de_passe_oublie():
     user.reset_token_expiry = datetime.utcnow() + timedelta(hours=1)
     db.session.commit()
 
-    frontend_url = os.environ.get("FRONTEND_URL", "http://127.0.0.1:5500")
+    # En production, FRONTEND_URL est recommandé. L'Origin du navigateur
+    # sert de secours lorsque le frontend est hébergé sur un autre domaine.
+    frontend_url = (
+        os.environ.get("FRONTEND_URL")
+        or request.headers.get("Origin")
+        or "http://127.0.0.1:5500"
+    ).rstrip("/")
     lien = f"{frontend_url}/reinitialiser-mot-de-passe.html?token={token}"
-    envoyer_email_reinitialisation(user.email, lien)
+    email_envoye = envoyer_email_reinitialisation(user.email, lien)
+    if not email_envoye:
+        print("[RESET] Le lien a été généré mais l'email n'a pas pu être envoyé. Vérifie MAIL_* sur Render.")
 
     return reponse_generique, 200
 
