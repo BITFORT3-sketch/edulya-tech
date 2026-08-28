@@ -21,7 +21,7 @@ FORMATIONS = [
         duree="8 semaines",
         prix=45000,
         image="images/formations/cyber.jpg",
-        ressource_url="https://drive.google.com/drive/folders/1_7Q3OjRpMxNbzw0FUW8WTpHN2iC9nf0F?usp=drive_link",
+        ressource_url="https://drive.google.com/drive/folders/1_7Q3OjRpMxNbzw0FUW8WTpHN2iC9nf0F?usp=sharing",
         programme="Bases de la sécurité informatique\nFailles courantes et vecteurs d'attaque\nSécurisation des mots de passe et des accès\nIntroduction aux pare-feux et à la surveillance réseau\nBonnes pratiques et hygiène numérique",
     ),
     dict(
