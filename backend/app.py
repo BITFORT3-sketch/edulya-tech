@@ -111,7 +111,7 @@ def _seed_formations_if_needed():
              tagline="Protège systèmes et données : failles, défense et bonnes pratiques.",
              description="Découvre les fondamentaux de la sécurité informatique : comment les systèmes sont attaqués, comment les défendre, et les bons réflexes à adopter au quotidien.",
              niveau="Débutant", duree="8 semaines", prix=45000, image="images/formations/cyber.jpg",
-             ressource_url="https://drive.google.com/drive/folders/1_7Q3OjRpMxNbzw0FUW8WTpHN2iC9nf0F?usp=sharing",
+             ressource_url="https://drive.google.com/drive/folders/1_7Q3OjRpMxNbzw0FUW8WTpHN2iC9nf0F?usp=drive_link",
              programme="Bases de la sécurité informatique\nFailles courantes et vecteurs d'attaque\nSécurisation des mots de passe et des accès\nIntroduction aux pare-feux et à la surveillance réseau\nBonnes pratiques et hygiène numérique"),
         dict(id="web", titre="Développement Web",
              tagline="HTML, CSS, JavaScript et frameworks modernes pour créer des sites complets.",
