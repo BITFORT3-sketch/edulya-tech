@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
     (async () => {
       let data;
       try {
-        const res = await fetch(`${API_URL}/api/formations/${id}`);
+        const res = await fetch(`${API_URL}/api/formations/${id}`,{ credentials: 'include' });
         if (!res.ok) throw new Error('not found');
         const body = await res.json();
         data = body.formation;
