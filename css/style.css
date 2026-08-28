@@ -1,3 +1,9 @@
+/* =========================================================
+   EDULYA-TECH — style.css
+   Palette : navy profond + or (réussite) + turquoise (tech)
+   Display : Space Grotesk / Corps : Inter / Utilitaire : JetBrains Mono
+   ========================================================= */
+
 :root{
   --bg: #0B1220;
   --surface: #121B2E;
@@ -82,15 +88,17 @@ img{ max-width: 100%; display: block; }
 .btn-primary:hover{ background: var(--gold-dark); }
 
 .btn-ghost{ background: transparent; color: var(--text); border-color: var(--border); }
-.btn-danger{ background: transparent; color: #E5484D; border-color: #E5484D; }
-.btn-danger:hover{ background: #E5484D; color: #fff; }
-
-.danger-zone{ border-color: #E5484D33; }
-.danger-zone p{ margin: 10px 0 16px; }
 .btn-ghost:hover{ border-color: var(--teal); color: var(--teal); }
 
 .btn-outline{ background: transparent; color: var(--teal); border-color: var(--teal); }
 .btn-outline:hover{ background: var(--teal); color: #06201C; }
+.btn-danger{ background: transparent; color: #ff6b6b; border: 1px solid #ff6b6b; }
+.btn-danger:hover{ background: #ff6b6b; color: #fff; }
+.consent-group{ margin-top: 4px; }
+.consent-label{ display:flex; align-items:flex-start; gap:10px; font-size:.84rem; line-height:1.5; cursor:pointer; }
+.consent-label input{ margin-top:4px; width:16px; height:16px; flex:0 0 auto; accent-color: var(--teal); }
+.consent-label a{ color: var(--teal); text-decoration:underline; }
+.account-danger-card{ grid-column: 1 / -1; }
 
 .btn-lg{ padding: 14px 28px; font-size: 1rem; }
 .btn-sm{ padding: 8px 16px; font-size: 0.85rem; }
@@ -546,20 +554,6 @@ input[type="password"]::-ms-clear{ display: none; }
   max-width: 460px;
 }
 .auth-form h2{ font-size: 1.4rem; margin-bottom: 24px; }
-
-.checkbox-field{
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 0.88rem;
-  color: var(--muted);
-  line-height: 1.4;
-  margin-bottom: 20px;
-  cursor: pointer;
-}
-.checkbox-field input{ margin-top: 3px; flex-shrink: 0; width: 16px; height: 16px; }
-.checkbox-field a{ color: var(--teal); }
-
 .auth-submit{ width: 100%; margin-top: 6px; }
 .auth-switch{ margin-top: 20px; font-size: 0.88rem; color: var(--muted); text-align: center; }
 .auth-switch a{ color: var(--teal); }
