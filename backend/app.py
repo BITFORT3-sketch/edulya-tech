@@ -16,6 +16,8 @@ from routes.avis import avis_bp
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    
+    CORS(app,resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
     # Nécessaire pour envoyer/recevoir le cookie de session depuis le frontend
     # (ex: fetch avec { credentials: "include" }).
@@ -27,8 +29,6 @@ def create_app():
     app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=30)
 
     db.init_app(app)
-
-    CORS(app, supports_credentials=True, origins=Config.FRONTEND_ORIGIN)
 
     # ----- Sécurité : avertissements au démarrage -----
     # Ces valeurs par défaut sont pratiques en local mais NE DOIVENT PAS
