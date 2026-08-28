@@ -34,6 +34,13 @@ Dans l'onglet **Environment** du service web, ajoute :
 | `DATABASE_URL` | l'Internal Database URL copiée à l'étape 2 |
 | `SECRET_KEY` | une chaîne aléatoire longue (ex. générée sur [randomkeygen.com](https://randomkeygen.com)) |
 | `FRONTEND_ORIGIN` | l'URL de ton site une fois déployé (ex. `https://edulya-tech.onrender.com`) — tu peux la mettre à `*` en attendant de connaître l'URL finale |
+| `FRONTEND_URL` | l'URL publique du frontend, sans `/` final (obligatoire pour les liens de réinitialisation) |
+| `MAIL_SERVER` | serveur SMTP, par ex. `smtp.gmail.com` |
+| `MAIL_PORT` | `587` avec TLS, ou `465` avec SSL |
+| `MAIL_USERNAME` | adresse email qui envoie les messages |
+| `MAIL_PASSWORD` | mot de passe d'application SMTP |
+| `MAIL_USE_TLS` | `true` pour le port 587 |
+| `MAIL_USE_SSL` | `false` pour le port 587, `true` pour le port 465 |
 
 ### 5. Déployer
 Clique **Create Web Service**. Render installe les dépendances, lance

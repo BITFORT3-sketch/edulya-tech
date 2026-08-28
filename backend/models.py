@@ -16,6 +16,8 @@ class User(db.Model):
     # Réinitialisation de mot de passe : token à usage unique + date d'expiration.
     reset_token = db.Column(db.String(255), nullable=True)
     reset_token_expiry = db.Column(db.DateTime, nullable=True)
+    # Consentement explicite aux conditions générales et à la politique de confidentialité.
+    conditions_acceptees = db.Column(db.Boolean, nullable=False, default=False)
 
     achats = db.relationship("Purchase", backref="user", lazy=True)
 

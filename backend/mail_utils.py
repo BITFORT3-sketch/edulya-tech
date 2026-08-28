@@ -20,6 +20,8 @@ def envoyer_email_reinitialisation(destinataire, lien_reinitialisation):
     mail_port = int(os.environ.get("MAIL_PORT", "587"))
     mail_username = os.environ.get("MAIL_USERNAME")
     mail_password = os.environ.get("MAIL_PASSWORD")
+    mail_use_tls = os.environ.get("MAIL_USE_TLS", "true").lower() == "true"
+    mail_use_ssl = os.environ.get("MAIL_USE_SSL", "false").lower() == "true"
 
     sujet = "Réinitialisation de ton mot de passe EDULYA-TECH"
     corps = (
@@ -46,10 +48,18 @@ def envoyer_email_reinitialisation(destinataire, lien_reinitialisation):
     msg["To"] = destinataire
 
     try:
-        with smtplib.SMTP(mail_server, mail_port) as server:
-            server.starttls()
-            server.login(mail_username, mail_password)
-            server.sendmail(mail_username, [destinataire], msg.as_string())
+        if mail_use_ssl:
+            with smtplib.SMTP_SSL(mail_server, mail_port) as server:
+                server.login(mail_username, mail_password)
+                server.sendmail(mail_username, [destinataire], msg.as_string())
+        else:
+            with smtplib.SMTP(mail_server, mail_port) as server:
+                server.ehlo()
+                if mail_use_tls:
+                    server.starttls()
+                    server.ehlo()
+                server.login(mail_username, mail_password)
+                server.sendmail(mail_username, [destinataire], msg.as_string())
         return True
     except Exception as e:
         print("Erreur lors de l'envoi de l'email :", e)

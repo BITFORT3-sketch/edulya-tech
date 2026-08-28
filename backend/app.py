@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from flask import Flask
+from sqlalchemy import text
 from flask_cors import CORS
 
 from config import Config
@@ -17,7 +18,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     
-    CORS(app,resources={r"/api/*": {"origins": Config.FRONTEND_ORIGIN}}, supports_credentials=True)
+    CORS(app,resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
     # Nécessaire pour envoyer/recevoir le cookie de session depuis le frontend
     # (ex: fetch avec { credentials: "include" }).
@@ -71,9 +72,32 @@ def create_app():
     # le simple déploiement suffit à préparer la base de données.
     with app.app_context():
         db.create_all()
+        _ajouter_colonne_consentement_si_necessaire()
         _seed_formations_if_needed()
 
     return app
+
+
+
+def _ajouter_colonne_consentement_si_necessaire():
+    """Ajoute la colonne de consentement aux bases déjà créées.
+
+    db.create_all() ne modifie pas les tables existantes ; cette migration
+    permet de déployer la nouvelle fonctionnalité sans perdre les comptes.
+    """
+    with db.engine.begin() as conn:
+        if db.engine.dialect.name == "postgresql":
+            conn.execute(text(
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS "
+                "conditions_acceptees BOOLEAN NOT NULL DEFAULT FALSE"
+            ))
+        elif db.engine.dialect.name == "sqlite":
+            colonnes = conn.execute(text("PRAGMA table_info(users)")).fetchall()
+            noms = {row[1] for row in colonnes}
+            if "conditions_acceptees" not in noms:
+                conn.execute(text(
+                    "ALTER TABLE users ADD COLUMN conditions_acceptees BOOLEAN NOT NULL DEFAULT 0"
+                ))
 
 
 def _seed_formations_if_needed():
