@@ -5,18 +5,15 @@ import secrets
 import os
 
 from extensions import db
-from models import User
+from models import User, Purchase, Avis
 from mail_utils import envoyer_email_reinitialisation
 from rate_limit import trop_de_tentatives, enregistrer_tentative, reinitialiser_tentatives
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/api")
 
 
-@auth_bp.route("/register", methods=["POST", "OPTIONS"])
+@auth_bp.route("/register", methods=["POST"])
 def register():
-    if request.method=="OPTIONS":
-        return "",200
-        
     data = request.get_json(silent=True) or {}
 
     nom = (data.get("nom") or "").strip()
@@ -76,6 +73,28 @@ def login():
 def logout():
     session.pop("user_id", None)
     return jsonify({"message": "Déconnecté."}), 200
+
+
+@auth_bp.route("/compte", methods=["DELETE"])
+def supprimer_compte():
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Connexion requise."}), 401
+
+    user = User.query.get(user_id)
+    if not user:
+        session.pop("user_id", None)
+        return jsonify({"error": "Compte introuvable."}), 404
+
+    # On supprime d'abord ce qui dépend du compte (achats, avis), puis le
+    # compte lui-même, pour respecter les clés étrangères.
+    Avis.query.filter_by(user_id=user_id).delete()
+    Purchase.query.filter_by(user_id=user_id).delete()
+    db.session.delete(user)
+    db.session.commit()
+
+    session.pop("user_id", None)
+    return jsonify({"message": "Compte supprimé."}), 200
 
 
 @auth_bp.route("/me", methods=["GET"])
