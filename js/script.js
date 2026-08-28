@@ -3,6 +3,7 @@
 // Ce fichier appelle le vrai backend Flask (voir js/config.js pour l'URL).
 // Toutes les requêtes liées à un compte utilisent { credentials: 'include' }
 // pour envoyer/recevoir le cookie de session.
+
 document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('navToggle');
   const nav = document.getElementById('mainNav');
@@ -538,6 +539,40 @@ document.addEventListener('DOMContentLoaded', () => {
         await fetch(`${API_URL}/api/logout`, { method: 'POST', credentials: 'include' });
       } finally {
         window.location.href = 'index.html';
+      }
+    });
+  }
+
+  // ----- Suppression de compte -----
+  const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+  if (deleteAccountBtn) {
+    deleteAccountBtn.addEventListener('click', async () => {
+      const confirmation = window.confirm(
+        'Es-tu sûr(e) de vouloir supprimer ton compte ? Cette action est définitive et supprimera aussi tes achats et tes avis.'
+      );
+      if (!confirmation) return;
+
+      const note = document.getElementById('deleteAccountNote');
+      deleteAccountBtn.disabled = true;
+      if (note) note.textContent = 'Suppression en cours...';
+
+      try {
+        const res = await fetch(`${API_URL}/api/compte`, {
+          method: 'DELETE',
+          credentials: 'include',
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          if (note) note.textContent = data.error || 'Une erreur est survenue.';
+          deleteAccountBtn.disabled = false;
+          return;
+        }
+
+        window.location.href = 'index.html';
+      } catch (err) {
+        if (note) note.textContent = 'Impossible de contacter le serveur.';
+        deleteAccountBtn.disabled = false;
       }
     });
   }
