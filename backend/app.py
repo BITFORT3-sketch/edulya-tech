@@ -17,7 +17,8 @@ from routes.avis import avis_bp
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-
+    app.config["SECRET_KEY"] = Config.SECRET_KEY
+    app.config["SESSION_COOKIE_NAME"] = "edulya_session"
     # Nécessaire pour envoyer/recevoir le cookie de session depuis le frontend
     # (ex: fetch avec { credentials: "include" }).
     app.config["SESSION_COOKIE_SAMESITE"] = "None"
