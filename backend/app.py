@@ -22,17 +22,19 @@ def create_app():
     # (ex: fetch avec { credentials: "include" }).
     app.config["SESSION_COOKIE_SAMESITE"] = "None"
     app.config["SESSION_COOKIE_SECURE"] = True  # True en production (HTTPS sur Render)
+    app.config["SESSION_COOKIE_HTTPONLY"] = True
+    
+
+    # L'utilisateur reste connecté 30 jours (session "permanente" côté Flask) —
+    # il ne doit être déconnecté que s'il clique lui-même sur "Se déconnecter".
+    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=30)
 
     CORS(
         app,
         resources={r"/api/*": {"origins": [Config.FRONTEND_ORIGIN]}}, 
         supports_credentials=True
     )
-
-    # L'utilisateur reste connecté 30 jours (session "permanente" côté Flask) —
-    # il ne doit être déconnecté que s'il clique lui-même sur "Se déconnecter".
-    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=30)
-
+    
     db.init_app(app)
 
     # ----- Sécurité : avertissements au démarrage -----
