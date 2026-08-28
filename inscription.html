@@ -99,10 +99,12 @@
         </div>
       </div>
 
-      <label class="checkbox-field">
-        <input type="checkbox" id="acceptTerms" required>
-        <span>J'accepte les <a href="conditions-generales.html" target="_blank">conditions générales</a> et la <a href="politique-confidentialite.html" target="_blank">politique de confidentialité</a></span>
-      </label>
+      <div class="form-group consent-group">
+        <label class="consent-label" for="acceptTerms">
+          <input type="checkbox" id="acceptTerms" name="acceptTerms" required>
+          <span>J'accepte les <a href="conditions-generales.html" target="_blank" rel="noopener">conditions générales</a> et la <a href="politique-confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</span>
+        </label>
+      </div>
 
       <button type="submit" class="btn btn-primary btn-lg auth-submit">Créer mon compte</button>
       <p class="form-note" id="signupNote"></p>
