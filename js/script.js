@@ -3,7 +3,6 @@
 // Ce fichier appelle le vrai backend Flask (voir js/config.js pour l'URL).
 // Toutes les requêtes liées à un compte utilisent { credentials: 'include' }
 // pour envoyer/recevoir le cookie de session.
-
 document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('navToggle');
   const nav = document.getElementById('mainNav');
@@ -111,8 +110,22 @@ document.addEventListener('DOMContentLoaded', () => {
           formNote.textContent = data.error || 'Une erreur est survenue.';
           return;
         }
-        formNote.textContent = 'Message envoyé — nous te répondrons sous 24 à 48h.';
+        // Ouvrir WhatsApp avec les informations du formulaire après enregistrement
+        // sur le serveur. Le numéro est au format international, sans + ni espaces.
+        const whatsappNumber = '237622150710';
+        const whatsappText = [
+          '📩 Nouvelle demande de contact - Edulya-Tech',
+          '',
+          `Nom : ${body.nom}`,
+          `Email : ${body.email}`,
+          `Sujet : ${body.sujet}`,
+          `Message : ${body.message}`
+        ].join('\n');
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`;
+
+        formNote.textContent = 'Message enregistré. Ouverture de WhatsApp...';
         contactForm.reset();
+        window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
       } catch (err) {
         formNote.textContent = 'Impossible de contacter le serveur. Vérifie qu\'il est bien lancé.';
       }
@@ -202,7 +215,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const res = await fetch(`${API_URL}/api/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
           body: JSON.stringify(body),
         });
         const data = await res.json();
@@ -225,6 +237,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (signupForm) {
     signupForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      const acceptTerms = document.getElementById('acceptTerms');
+      if (!acceptTerms || !acceptTerms.checked) {
+        signupNote.textContent = 'Tu dois accepter les conditions générales et la politique de confidentialité.';
+        acceptTerms?.focus();
+        return;
+      }
+
       signupNote.textContent = 'Création du compte...';
 
       const body = {
@@ -233,10 +253,11 @@ document.addEventListener('DOMContentLoaded', () => {
         email: document.getElementById('signupEmail').value,
         telephone: document.getElementById('telephone').value,
         password: document.getElementById('signupPassword').value,
+        conditions_acceptees: document.getElementById('acceptTerms').checked,
       };
 
       try {
-        const res = await fetch(`${API_URL}/api/register`, {
+        const res = await fetch(`${API_URL}/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -531,6 +552,50 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
   }
 
+  // ----- Suppression du compte -----
+  const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+  const deleteAccountNote = document.getElementById('deleteAccountNote');
+  if (deleteAccountBtn) {
+    deleteAccountBtn.addEventListener('click', async () => {
+      const confirmation = window.confirm(
+        'ATTENTION : ton compte, tes achats et tes avis seront supprimés définitivement. Continuer ?'
+      );
+      if (!confirmation) return;
+
+      const password = window.prompt('Pour confirmer, saisis ton mot de passe :');
+      if (password === null) return;
+      if (!password) {
+        deleteAccountNote.textContent = 'Le mot de passe est obligatoire pour supprimer le compte.';
+        return;
+      }
+
+      deleteAccountBtn.disabled = true;
+      deleteAccountNote.textContent = 'Suppression en cours...';
+
+      try {
+        const res = await fetch(`${API_URL}/api/supprimer-compte`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ password }),
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          deleteAccountNote.textContent = data.error || 'Impossible de supprimer le compte.';
+          deleteAccountBtn.disabled = false;
+          return;
+        }
+
+        deleteAccountNote.textContent = 'Compte supprimé définitivement. Redirection...';
+        setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+      } catch (err) {
+        deleteAccountNote.textContent = 'Impossible de contacter le serveur.';
+        deleteAccountBtn.disabled = false;
+      }
+    });
+  }
+
   // ----- Déconnexion -----
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) {
@@ -539,40 +604,6 @@ document.addEventListener('DOMContentLoaded', () => {
         await fetch(`${API_URL}/api/logout`, { method: 'POST', credentials: 'include' });
       } finally {
         window.location.href = 'index.html';
-      }
-    });
-  }
-
-  // ----- Suppression de compte -----
-  const deleteAccountBtn = document.getElementById('deleteAccountBtn');
-  if (deleteAccountBtn) {
-    deleteAccountBtn.addEventListener('click', async () => {
-      const confirmation = window.confirm(
-        'Es-tu sûr(e) de vouloir supprimer ton compte ? Cette action est définitive et supprimera aussi tes achats et tes avis.'
-      );
-      if (!confirmation) return;
-
-      const note = document.getElementById('deleteAccountNote');
-      deleteAccountBtn.disabled = true;
-      if (note) note.textContent = 'Suppression en cours...';
-
-      try {
-        const res = await fetch(`${API_URL}/api/compte`, {
-          method: 'DELETE',
-          credentials: 'include',
-        });
-        const data = await res.json();
-
-        if (!res.ok) {
-          if (note) note.textContent = data.error || 'Une erreur est survenue.';
-          deleteAccountBtn.disabled = false;
-          return;
-        }
-
-        window.location.href = 'index.html';
-      } catch (err) {
-        if (note) note.textContent = 'Impossible de contacter le serveur.';
-        deleteAccountBtn.disabled = false;
       }
     });
   }
